@@ -1,6 +1,5 @@
 import streamlit as st
 import pandas as pd
-import streamlit as st
 from numpy.random import default_rng as rng
 
 
@@ -9,6 +8,7 @@ st.title("Somnia dashboard")
 
 with st.sidebar:
     st.title("overview")
+
 
 
 col1, col2 = st.columns(2)
@@ -21,6 +21,7 @@ with col1:
     metric_col4.metric(label="Noise level", value="70 °F", delta="1.2 °F")
 
 df = pd.DataFrame(rng(0).standard_normal((20, 3)), columns=["a", "b", "c"])
+
 
 col2.line_chart(df)
 
