@@ -4,9 +4,11 @@ import streamlit as st
 from numpy.random import default_rng as rng
 
 
+st.title("Somnia dashboard")
+
+
 with st.sidebar:
     st.title("overview")
-
 
 
 col1, col2 = st.columns(2)
