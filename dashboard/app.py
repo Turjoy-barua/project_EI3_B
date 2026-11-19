@@ -10,6 +10,36 @@ with st.sidebar:
     st.title("overview")
 
 
+color = st.select_slider(
+    "Select how many hours you're planning to sleep",
+    options=[
+        "5h",
+        "6h",
+        "7h",
+        "8h",
+        "9h",
+        "10h",
+        "11h",
+    ],
+)
+
+
+
+
+pages = {
+    "Your account": [
+        st.Page("create_account.py", title="Create your account"),
+        st.Page("manage_account.py", title="Manage your account"),
+    ],
+    "Resources": [
+        st.Page("learn.py", title="Learn about us"),
+        st.Page("trial.py", title="Try it out"),
+    ],
+}
+
+pg = st.navigation(pages, position="top")
+pg.run()
+
 
 col1, col2 = st.columns(2)
 
