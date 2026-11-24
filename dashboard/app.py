@@ -6,6 +6,8 @@ from datetime import time
 
 
 
+
+
 #different pages
 
 # Define pages
@@ -17,14 +19,16 @@ page2 = st.Page("page_2.py", title="📄Page 2")
 pg = st.navigation([home, page1, page2])
 
 
+
 # Sidebar
 with st.sidebar:
     st.title("Overview")
 
 
 
-st.title("Somnia dashboard")
 
+
+st.title("Somnia dashboard")
 
 period = st.select_slider(
     "Select how many hours you're planning to sleep",
@@ -48,6 +52,7 @@ t = st.time_input(
     time(8, 45),
     key="alarm_time"
 )
+
 st.write("Alarm is set for", t)
 
 
@@ -63,6 +68,12 @@ b.metric("Humidity", "35%", "5%", border=True)
 c.metric("Light", "200 lux", "-50 lux", border=True)
 d.metric("Noise", "35 dBA", "5 dBA", border=True)
 
+col1, col2= st.columns(2)
 
-# Display selected page
-pg.run()
+with col1:
+    df = pd.DataFrame(rng(0).standard_normal((20, 3)), columns=["a", "b", "c"])
+    st.line_chart(df)
+
+with col2:
+    st.header("Tonight's summary")
+
