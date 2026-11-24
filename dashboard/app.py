@@ -5,6 +5,7 @@ from datetime import time
 
 
 
+
 #different pages
 
 # Define pages
@@ -14,7 +15,6 @@ page2 = st.Page("page_2.py", title="📄Page 2")
 
 # Navigation
 pg = st.navigation([home, page1, page2])
-
 
 
 # Sidebar
