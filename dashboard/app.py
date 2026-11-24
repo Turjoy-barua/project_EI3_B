@@ -8,7 +8,14 @@ st.title("Somnia dashboard")
 
 with st.sidebar:
     st.title("overview")
+    if st.button("🏠 Home", use_container_width=True):
+        st.switch_page("app.py")
 
+    if st.button("📄 Page 1", use_container_width=True):
+        st.switch_page("page_1.py")
+
+    if st.button("📄 Page 2", use_container_width=True):
+        st.switch_page("page_2.py")
 
 color = st.select_slider(
     "Select how many hours you're planning to sleep",
@@ -21,14 +28,22 @@ color = st.select_slider(
         "10h",
         "11h",
     ],
+    key="sleep_hours_slider"
 )
 
 
 
 #Alarm
+t = st.time_input(
+    "Set an alarm for",
+    time(8, 45),
+    key="alarm_time"
+)
 
-t = st.time_input("Set an alarm for", time(8, 45))
 st.write("Alarm is set for", t)
+
+#t = st.time_input("Set an alarm for", time(8, 45))
+#st.write("Alarm is set for", t)
 
 
 
@@ -48,14 +63,6 @@ st.write("Alarm is set for", t)
 #pg = st.navigation(pages, position="top")
 #pg.run()
 
-
-
-if st.button("Home"):
-    st.switch_page("app.py")
-if st.button("Page 1"):
-    st.switch_page("page_1.py")
-if st.button("Page 2"):
-    st.switch_page("page_2.py")
 
 
 
