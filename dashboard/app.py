@@ -5,9 +5,6 @@ from datetime import time
 
 
 
-
-
-
 #different pages
 
 # Define pages
@@ -26,9 +23,8 @@ with st.sidebar:
 
 
 
-
-
 st.title("Somnia dashboard")
+
 
 period = st.select_slider(
     "Select how many hours you're planning to sleep",
@@ -52,7 +48,6 @@ t = st.time_input(
     time(8, 45),
     key="alarm_time"
 )
-
 st.write("Alarm is set for", t)
 
 
