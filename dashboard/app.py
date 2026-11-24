@@ -6,8 +6,6 @@ from datetime import time
 
 
 
-
-
 #different pages
 
 # Define pages
