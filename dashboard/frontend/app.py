@@ -1,8 +1,7 @@
 import streamlit as st
 import pandas as pd
 from numpy.random import default_rng as rng
-from datetime import time
-
+from datetime import datetime
 
 
 
@@ -12,11 +11,12 @@ from datetime import time
 page_element="""
 <style>
 .stApp {
-background-image: url("https://images.pexels.com/photos/31646205/pexels-photo-31646205.png");
+background-image: url("https://images.pexels.com/photos/8417258/pexels-photo-8417258.jpeg");
 background-size: cover;
 background-repeat: no-repeat;
 background-attachment: fixed;
 }
+.st-key-my_blur_box {filter: blur(4px);}
 </style>
 """
 st.markdown(page_element, unsafe_allow_html=True)
@@ -26,18 +26,26 @@ st.set_page_config( # --> configuring the page
     page_icon="🌦️",
     layout="wide",
 )
+# top bar
+top_col1, top_col2 = st.columns(2)
+top_col1.header("Somnia dashboard")
+date = datetime.now().strftime("%a %d %b %Y")
 
 
+date_content = [date, ]
+date_col1, date_col2 = top_col2.columns(2)
+date_col1.badge("Device online", width="stretch", color="green")
+date_col2.subheader(f":blue[{date}]", text_alignment="right",)
 
 #different pages
 
-# Define pages
+# side bar
 home = st.Page("app.py", title="🏠Home", default=True)
 page1 = st.Page("page_1.py", title="📄Page 1")
 page2 = st.Page("page_2.py", title="📄Page 2")
 
 # Navigation
-pg = st.navigation([home, page1, page2])
+#pg = st.navigation([home, page1, page2])
 
 
 
@@ -49,60 +57,88 @@ with st.sidebar:
 
 
 
-st.title("Somnia dashboard")
-
-
 
 
 changes = list(rng(4).standard_normal(20))
 data = [sum(changes[:i]) for i in range(20)]
 delta = round(data[-1], 2)
 
-a, b = st.columns(2)
-c, d = st.columns(2)
 
-a.metric("Temperature", 10, delta, chart_data=data, chart_type="line", border=True)
-b.metric("Humidity", "35%", "5%", chart_data=data, chart_type="line", border=True)
+col1, col2, col3, col4 = st.columns(4, gap="medium", border=True)
 
-c.metric("Light", "200 lux", "-50 lux", chart_data=data, chart_type="line", border=True)
-d.metric("Noise", "35 dBA", "5 dBA", chart_data=data, chart_type="line", border=True)
+with col1:
+    st.metric("Temperature", "21.5 °C", "+0.2 °C",
+              chart_data=[1,2,3,2,1,5],
+              chart_type="line", border=True)
 
+with col2:
+    st.metric("Humidity", "45%", "-1%",
+              chart_data=[1,2,3,2,1,5],
+              chart_type="line", border=True)
+
+with col3:
+    st.metric("Light", "12 lux", "-3 lux",
+              chart_data=[1,2,3,2,1,5],
+              chart_type="line", border=True)
+
+with col4:
+    st.metric("Noise", "28 dB", "+2 dB",
+              chart_data=[1,2,3,2,1,5],
+              chart_type="line", border=True)
+    
+    
+    
 col1, col2= st.columns([3,1], border=True)
 
 with col1:
     st.header("Graph")
-    df = pd.DataFrame(rng(0).standard_normal((20, 3)), columns=["a", "b", "c"])
+    df = pd.DataFrame(rng(0).standard_normal((20, 4)), columns=["Temp", "Hum", "Lum", "sound"])
     st.line_chart(df)
 
+
+summmary = [
+    ("Environment condition", "Good"),
+    ("Monitoring duration", "8H"),
+    ("Average temperature", "25°C"),
+    ("Average sound intensity", "19 units"),
+    ("Average humidity", "20%")
+]
+Sensors_condition = [
+    ("Temp & Hum", "Online"),
+    ("Sound", "Off"),
+    ("Light", "Online")
+]
 with col2:
-    st.header("Tonight's summary",)
+    st.subheader("Tonight's activity")
+    activity_container = st.container(border=True)
+    with activity_container:
+            for description, value in summmary:
+                summ_col1, summ_col2 = st.columns([3, 1])
+                with summ_col1:
+                            st.write(description)
+                with summ_col2:
+                            st.badge(value, color="orange")
+    st.subheader("Sensors")
+    sensor_container = st.container(border=True)
+    with sensor_container:
+        for description, value in Sensors_condition:
+                summ_col1, summ_col2 = st.columns([3, 1])
+                with summ_col1:
+                            st.write(description)
+                with summ_col2:
+                    if value == "Online":
+                            st.badge(value, color="green")
+                    else:
+                        st.badge(value, color="red")
+        
+        
 
-    summary_col1, summary_col2 = col2.columns(2)
-    summary_col1.divider()
-    summary_col2.divider()
-    summary_col1.text("Monitoring duration", text_alignment='left')
-    summary_col2.markdown("**8H**",text_alignment="right")
-    summary_col1.divider()
-    summary_col2.divider()
-    summary_col1.text("Average temperature", text_alignment='left')
-    summary_col2.subheader("25",text_alignment="right")
-    summary_col1.divider()
-    summary_col2.divider()
-    summary_col1.text("Average sound intensity", text_alignment='left')
-    summary_col2.subheader("19 units",text_alignment="right")
-    summary_col1.divider()
-    summary_col2.divider()
-    summary_col1.text("Average humidity", text_alignment='left')
-    summary_col2.subheader("20%",text_alignment="right")
-    summary_col1.divider()
-    summary_col2.divider()
 
-
-events = [
-    ("23:15", "Light increase detected", "82 units", "🟡"),
-    ("22:30", "Noise peak detected", "76 units", "🟣"),
-    ("23:00", "Temperature increase", "+0.5 °C", "🔵"),
-    ("23:00", "Monitoring started", "", "🟢"),
+recent_events = [
+    ("23:15", "Light increase detected", "82 units"),
+    ("22:30", "Noise peak detected", "76 units"),
+    ("23:00", "Temperature increase", "+0.5 °C"),
+    ("23:00", "Monitoring started", ""),
 ]
 
 with st.container(border=True):
@@ -117,17 +153,15 @@ with st.container(border=True):
 
     st.divider()
 
-    for time, description, value, icon in events:
+    for time, description, value in recent_events:
 
-        col1, col2, col3 = st.columns([1, 3, 1])
+        col1, col2 = st.columns([3, 1])
+
 
         with col1:
-            st.write(f"{icon} {time}", )
-
-        with col2:
             st.write(description)
 
-        with col3:
+        with col2:
             st.caption(value)
 
         st.divider()
